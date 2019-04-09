@@ -1,0 +1,30 @@
+B
+
+Q.
+다음 프로그램의 실행 결과를 쓰시오.
+using System;
+class ExerciseCh1_5_2 {
+    public static void Main()
+    {
+        int i = 1, j = 0, k;
+        try
+        {
+            Console.WriteLine("Exception checking...");
+            k = i / j;
+            Console.WriteLine("After Exception happening...");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Caught Exception...");
+        }
+        finally
+        {
+            Console.WriteLine("In the finally statement...");
+        }
+    }
+}
+
+A.
+Exception checking...
+Caught Exception...
+In the finally statement...

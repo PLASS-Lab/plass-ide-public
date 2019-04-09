@@ -1,0 +1,23 @@
+B
+
+Q.
+다음 프로그램의 실행 결과를 쓰시오.
+using System;
+delegate void Delegate();
+class ExerciseCh1_5_1 {
+    public static void Method1(){
+        Console.WriteLine("In the Method 1 ...");
+    }
+    public static void Method2(){
+        Console.WriteLine("In the Method 2 ...");
+    }
+    public static void Main(){
+        Delegate d = new Delegate(Method1);
+        d += new Delegate(Method2);
+        d();
+    }
+}
+
+A.
+In the Method 1 ...
+In the Method 2 ...

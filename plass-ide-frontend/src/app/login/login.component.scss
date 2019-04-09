@@ -1,0 +1,38 @@
+p-card.card-panel {
+  width: 500px;
+  height: 250px;
+  margin: calc((100vh - 500px) / 2) calc((100vw - 500px) / 2) calc((100vh - 500px) / 2) calc((100vw - 500px) / 2);
+}
+
+.login-card-container {
+  display: flex;
+  flex-direction: column;
+
+  .form-container {
+    flex: 1 1 auto;
+    flex-direction: row;
+    display: flex;
+
+    .input-container {
+      flex: 1 1 auto;
+
+      .ui-inputgroup {
+        width: 100%;
+        margin: 5px;
+
+        input {
+          width: 100%;
+          padding: 3px 2px 2px 2px;
+        }
+      }
+    }
+
+    .submit-button {
+      margin: 20px;
+    }
+  }
+}
+
+img.logo {
+  width: 100%;
+}

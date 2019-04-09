@@ -1,0 +1,1 @@
+docker run --rm -v C:\Users\user\Projects\plass-ide\plass-ide-api-server\files:/app/src cmake-temp

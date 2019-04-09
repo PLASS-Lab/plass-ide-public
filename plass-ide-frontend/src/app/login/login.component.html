@@ -1,0 +1,18 @@
+<p-card class="card-panel">
+    <div class="login-card-container">
+        <img class="logo" src="assets/logo.png" />
+        <form class="form-container">
+            <div class="input-container">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
+                    <input [(ngModel)]="userId" pInputText name="userId" placeholder="Username" type="text">
+                </div>
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon"><i class="pi pi-key"></i></span>
+                    <input [(ngModel)]="userPw" pInputText name="userPw" placeholder="Password" type="password">
+                </div>
+            </div>
+            <p-button (click)="onLoginButtonClick($event)" class="submit-button" icon="pi pi-sign-in" label="Login"></p-button>
+        </form>
+    </div>
+</p-card>

@@ -1,0 +1,24 @@
+<div class="root">
+    <p-card class="card-panel panel__problem">
+        <a href="{{apiUrl}}/signout">
+            <p-button label="로그아웃" styleClass="ui-button-danger"></p-button>
+        </a>
+        <perfect-scrollbar>
+            <p-accordion (onOpen)="onProblemClick($event)">
+                <p-accordionTab *ngFor="let problem of javaProblemLabels; index as i" [header]="problem">
+                    <div *ngIf="javaProblems[i]" class="panel__problem__content">
+                        <pre>{{javaProblems[i].question}}</pre>
+                        <button (click)="onAnswerButtonClick(i)" [label]="javaProblems[i].type === 'A' ? '풀어보기' : '답안 확인'" class="panel__problem__content__button--check ui-button-success" icon="pi pi-arrow-right" iconPos="right" pButton type="button"></button>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </perfect-scrollbar>
+    </p-card>
+    <p-card class="card-panel panel__editor">
+        <div class="editor-root">
+            <ace-editor #editor [(ngModel)]="answer" class="editor" mode="java" theme="dracula"></ace-editor>
+            <button (click)="runSource()" class="panel__problem__content__button--check ui-button-success" icon="pi pi-caret-right" iconPos="right" label="실행" pButton type="button"></button>
+            <ace-editor #editor [(ngModel)]="result" [readOnly]="true" class="editor" theme="dracula"></ace-editor>
+        </div>
+    </p-card>
+</div>

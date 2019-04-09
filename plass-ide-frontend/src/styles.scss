@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~primeicons/primeicons.css';
+@import '~primeng/resources/primeng.min.css';
+@import "~primeng/resources/themes/nova-light/theme.css";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #FAFAFA;
+}
+
+p-card.card-panel {
+  display: inline-block;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  margin: 8px;
+
+  .ui-card {
+    width: 100%;
+    height: 100%;
+
+    .ui-card-body {
+      width: 100%;
+      height: 100%;
+      .ui-card-content {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

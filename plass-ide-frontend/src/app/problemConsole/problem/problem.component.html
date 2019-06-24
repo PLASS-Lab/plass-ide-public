@@ -1,0 +1,32 @@
+<article *ngIf="problem">
+    <h1>{{problem.id}}. {{problem.name}}</h1>
+    <div class="problem-wrapper wrapper">
+        <h2>문제</h2>
+        <p [innerHTML]="escapeString(problem.content)"></p>
+    </div>
+    <div class="input-wrapper wrapper">
+        <h2>입력</h2>
+        <p [innerHTML]="escapeString(problem.input)"></p>
+    </div>
+    <div class="output-wrapper wrapper">
+        <h2>출력</h2>
+        <p [innerHTML]="escapeString(problem.output)"></p>
+    </div>
+    <div class="examples-wrapper wrapper" *ngIf="problem.testCases">
+        <div class="example-wrapper"
+            *ngFor="let testCase of problem.testCases; let i = index">
+            <div class="example-input-wrapper example-container">
+                <h2>입력 예제 {{i+1}}</h2>
+                <textarea readonly rows="4">{{testCase.input}}</textarea>
+            </div>
+            <div class="example-out-wrapper example-container">
+                <h2>출력 예제 {{i+1}}</h2>
+                <textarea readonly rows="4">{{testCase.output}}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="remarks-wrapper wrapper" *ngIf="problem.remarks">
+        <h2>비고</h2>
+        <p [innerHTML]="problem.remarks"></p>
+    </div>
+</article>

@@ -1,0 +1,114 @@
+.ide-wrapper{
+  display: flex;
+  height: 100%;
+  border-top: 1px solid #303030;
+  aside-problem{
+    flex: 1;
+    border-right: 1px solid #303030;
+  }
+  section {
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    .editor-wrapper {
+      display: flex;
+      flex-direction: row;
+      height: 75%;
+      border-bottom: 1px solid #303030;
+      tab-component {
+        flex: 1;
+        border-right: 1px solid #303030;
+      }
+      tab-component:last-child {
+        border-right: 0;
+      }
+    }
+    .console-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 25%;
+      .console {
+        flex: 1;
+        font-size: 18px;
+      }
+      .console-input-wrapper {
+        margin-left: 40px;
+        input[type=text] {
+          width: 100%;
+        }
+      }
+    }
+
+    .editor-wrapper{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      .editor {
+          flex: 1;
+          height: 100%;
+          font-size: 16px; 
+          line-height: 1.3;
+      }
+      .toolbox-wrapper{
+        position: absolute;
+        z-index: 100;
+        background: white;
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+}
+
+.modal {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loading-modal {
+    
+  }
+  .result-modal {
+    width: 300px;
+    padding: 10px;
+
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #32c8a5;
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    p {
+      label {
+        font-weight: 500;
+      } 
+      line-height: 1.25rem;
+      padding-bottom: 10px;
+
+      button {
+        margin-top: 15px;
+        width: 100%;
+        height: 42px;
+        border: 0;
+        background: #32c8a5;
+        color: white;
+        text-align: center;
+        font-size: 1.15rem;
+        cursor: pointer;
+      }
+    }
+    p:last-child {
+      padding-bottom: 0;
+    }
+  }
+}

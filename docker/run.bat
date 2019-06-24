@@ -1,1 +1,0 @@
-docker run --rm -v C:\Users\user\Downloads\User-38817:/src java-build:1.0

@@ -1,0 +1,34 @@
+<div class="ide-wrapper" *ngIf="project" (click)="disableContextMenu($event)">
+    <aside-problem [problem_id]="project.problem"></aside-problem>
+    <section>
+        <div class="editor-wrapper">
+            <div ace-editor class="editor" theme='eclipse' [(text)]="text" 
+                (textChanged)="changeEditor($event)"></div>
+            <div class="toolbox-wrapper">
+                <button (click)="compileProject($event)">run</button>
+                <button (click)="submitProject($event)">submit</button>
+            </div>
+        </div>
+        <div class="console-wrapper">
+            <div ace-editor class="console" theme='eclipse' [(text)]="resultConsole"></div>
+            <div class="console-input-wrapper">
+                <input type="text" (keyup)="consoleInput($event)"/>
+            </div>
+        </div>
+    </section>
+</div>
+
+<ng-container *ngIf="resultSubmit">
+    <div class="modal">
+        <div class="result-modal">
+            <h1>제출 결과</h1>
+            <img>
+            <p><label>컴파일</label> : {{resultSubmit.compile ? "성공" : "실패"}}</p>
+            <p><label>전체 테스트 케이스</label> : {{resultSubmit.testMax}}</p>
+            <p><label>통과한 테스트 케이스</label> : {{resultSubmit.testSuccess}}</p>
+            <p>
+                <button (click)="dismissResult()">완료</button>
+            </p>
+        </div>
+    </div>
+</ng-container>

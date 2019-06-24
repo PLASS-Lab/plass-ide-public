@@ -1,0 +1,50 @@
+<section class="root">
+    <h1 class="slogan">
+        <div class="back">
+            <p>문제 리스트</p>
+        </div>
+    </h1>
+    <article class="problems-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th width="50px">
+                        연번
+                    </th>
+                    <th>
+                        제목
+                    </th>
+                    <th width="150rem">
+                        카테고리
+                    </th>
+                    <th width="100rem">
+                        작성일
+                    </th>
+                    <th width="100rem">
+                        완료여부
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let problem of problems; let i = index" (click)="handleClickProblem(problem.id)">
+                    <td>{{problem.id}}</td>
+                    <td class="title">{{problem.name}}</td>
+                    <td>{{problem.category}}</td>
+                    <td>{{getDate(problem.created)}}</td>
+                    <td>
+                        <span></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <ul>
+                <li (click)="handlePagenation(0)"> &lt; </li>
+                <li (click)="handlePagenation(0)"> 01 </li>
+                <li (click)="handlePagenation(1)"> 02 </li>
+                <li (click)="handlePagenation(2)"> 03 </li>
+                <li (click)="handlePagenation(2)"> &gt; </li> 
+            </ul>
+        </div>
+    </article>
+</section>

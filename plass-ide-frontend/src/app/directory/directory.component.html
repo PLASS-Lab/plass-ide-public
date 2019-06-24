@@ -1,0 +1,51 @@
+<section (contextmenu)="openContextMenu($event)" (click)="selectProject($event); disableContextMenu($event)">
+    <div class="tooltip-wrapper">
+        <a (click)="openCreatePopup()">+ add project</a>
+    </div>
+    <div class="directory-wrapper">
+        <div class="project-container container">
+            <h1>프로젝트</h1>
+            <ng-container *ngIf="projects">
+                <ul>
+                    <list-element *ngFor="let project of projects" (click)="selectProject($event, project)" 
+                        [project]="project" [ngClass]="{'project-selected': project.select}" 
+                        (contextmenu)="openContextMenu($event, project)"></list-element>
+                </ul>
+            </ng-container>
+            <ng-container *ngIf="!projects">
+                <ul>
+                    <li>
+                        비어있어요...
+                    </li>
+                </ul>
+            </ng-container>
+        </div>
+        <div class="problem-container container">
+            <h1>문제</h1>
+            <ng-container *ngIf="projectsWithProblem">
+                <ul>
+                    <list-element *ngFor="let project of projectsWithProblem" (click)="selectProject($event, project)" 
+                        [project]="project" [ngClass]="{'project-selected': project.select}"  [isProblem]="true"
+                        (contextmenu)="openContextMenu($event, project)"></list-element>
+                </ul>
+            </ng-container>
+            <ng-container *ngIf="!projectsWithProblem">
+                <ul>
+                    <li>
+                        비어있어요...
+                    </li>
+                </ul>
+            </ng-container>
+        </div>
+    </div>
+</section>
+<app-createPopup #createModal></app-createPopup>
+
+<ng-container *ngIf="projectMenu.visible">
+    <div class="context-menu" [ngStyle]="{'top.px': projectMenu.y, 'left.px': projectMenu.x}">
+        <div class="menu-item" [ngClass]="{disabled: projectMenu.type !== 'project'}"
+            (click)="deleteProjects(); disableContextMenu($event)">Delete</div>
+        <div class="menu-item" [ngClass]="{disabled: projectMenu.type === 'project'}"
+            (click)="openCreatePopup(); disableContextMenu($event)">Add</div>
+    </div>
+</ng-container>

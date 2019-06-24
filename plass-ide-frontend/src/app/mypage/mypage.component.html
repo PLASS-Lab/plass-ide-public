@@ -1,0 +1,90 @@
+<article>
+    <h1>개인 페이지</h1>
+    <div class="info-wrapper" *ngIf="user">
+        <div class="image-wrapper">
+            <img src="https://www.dongguk.edu/file/mbs/kr/images/editor/1490848602262_img.jpg"/>
+        </div>
+        <table class="info-table">
+            <tr>
+                <td class="label-wrapper">이름</td>
+                <td>{{user.name}}</td>
+                <td class="label-wrapper">학교</td>
+                <td>{{user.school}}</td>
+            </tr>
+            <tr>
+                <td class="label-wrapper">학번</td>
+                <td>{{user.student_id}}</td>
+                <td class="label-wrapper">학년</td>
+                <td>{{user.grade}}</td>
+            </tr>
+            <tr>
+                <td class="label-wrapper">메일</td>
+                <td>{{user.email}}</td>
+            </tr>
+            <tr>
+                <td class="label-wrapper">비밀번호</td>
+                <td>
+                    <span class="password-wrapper">*********</span>
+                    <a class="btn-change">변경</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-wrapper">생년월일</td>
+                <td>
+                    {{user.birth}}
+                </td>
+                <td class="label-wrapper">가입일자</td>
+                <td>
+                    {{user.created}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h1>
+        내 랭킹
+    </h1>
+    <div class="rank-container">
+        <div class="tab-wrapper">
+            <a class="active">시즌 1</a>
+        </div>
+        <div class="rank-wrapper">
+            <div class="image-wrapper">
+                <img src="../../assets/plat.png" width="130px" height="130px">
+            </div>
+            <div class="detail-info">
+                <h2>
+                    당신의 랭킹은 상위 
+                    <span class="span-percentage">100%</span>
+                    입니다.
+                </h2>
+                <p>
+                    내가 푼 문제 수 : <span class="span-result">5</span>
+                </p>
+                <p>
+                    제출한 문제 수 : <span class="span-result">3</span>
+                </p>
+                <p>
+                    중도 포기한 수 : <span class="span-result">2</span>
+                </p>
+                <p>
+                    성공률 : <span class="span-result">60%</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <h1>
+        내가 푼 문제
+    </h1>
+    <div class="resolve-wrapper">
+        <a>1</a>
+        <a>3</a>
+        <a>4</a>
+    </div>
+    <h1>
+        해결 중인 문제
+    </h1>
+    <div class="resolve-wrapper">
+        <a>2</a>
+        <a>12</a>
+    </div>
+</article>

@@ -1,1 +1,2 @@
-docker build -t java-build:1.0 .
+@echo off
+docker build --t java-build:1.0 .

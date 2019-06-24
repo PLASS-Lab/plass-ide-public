@@ -1,0 +1,105 @@
+article {
+    width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    h1 {
+        font-weight: 600;
+        font-size: 2rem;
+        color: #303030;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+    .info-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .image-wrapper {
+            width: 200px;
+            img {
+                vertical-align: 0;
+                width: 150px;
+                height: 200px;
+            }
+        }
+        .info-table {
+            width: 100%;
+            table-layout: fixed;
+            tr{
+                td{
+                    padding: 10px;
+                    .btn-change {
+                        margin-left: 10px;
+                    }
+                }
+                .label-wrapper {
+                    text-align: center;
+                    width: 150px;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+    .rank-container {
+        .tab-wrapper {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            a {
+                display: inline-block;
+                padding: 0 25px;
+                border: 1px solid #303030;
+                line-height: 35px;
+                height: 35px;
+                border-right: 0;
+                vertical-align: bottom;
+            }
+            a:last-child {
+                border-right: 1px solid #303030;
+            }
+            a.active {
+                border-bottom: 0;
+            }
+        }
+        .tab-wrapper::after{
+            width: 100%;
+            content: " ";
+            display: inline-block;
+            vertical-align: bottom;
+            border-bottom: 1px solid #303030;
+        }
+        .rank-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: 1px solid #303030;
+            border-top: 0;
+            .detail-info {
+                padding: 15px;
+                h2 {
+                    font-size: 1.85rem;
+                    font-weight: 500;
+                    .span-percentage {
+                        color: #fbbe18;
+                        font-size: 2rem;
+                        font-weight: 600;
+                    }
+                    margin-bottom: 10px;
+                }
+                p {
+                    padding: 5px 0;
+                }
+                .span-result {
+                    font-size: 1.15rem;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+    .resolve-wrapper {
+        a {
+            display: inline-block;
+            padding: 10px;
+        }
+    }
+}

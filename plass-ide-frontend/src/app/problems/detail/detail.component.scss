@@ -1,0 +1,109 @@
+section {
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    .slogan {
+        position: relative;
+        width: 100%;
+        height: 250px;
+        max-height: 250px;
+        margin-bottom: 15px;
+        background: url('../../../assets/back.jpg');  
+        .back {
+            position: absolute;
+            top:0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background:rgba(0,0,0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            p {
+                font-size: 3rem;
+                color: white;
+                font-weight: 600;
+                text-align: center;
+            }
+        }
+    }
+    article {
+        min-width: 1200px;
+        nav {
+            ul {
+                margin-bottom: 15px;
+                li{
+                    cursor: pointer;
+                    color: #303030;
+                    display: inline-block;
+                    padding: 0 10px;
+                    line-height: 2rem;
+                    font-size: 0.85rem;
+                    text-align: center;
+                    margin-right: 10px;
+                    a {
+                        color: inherit;
+                    }
+                }
+                li:hover {
+                    background: #5080c0;
+                    color: white;
+                }
+                li:active {
+                    background: #3350a0;
+                }
+                li.active{
+                    background: #3350a0;
+                    color: white;
+                }
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .wrapper {
+            margin-bottom: 25px;
+            h2 {
+                font-size: 1.25rem;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #a0a0a0;
+                margin-bottom: 10px;
+            }
+            p {
+                font-size: 1rem;
+                line-height: 1.25rem;
+            }
+        }
+        .examples-wrapper {
+            .example-wrapper {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                .example-container {
+                    flex: 1 1 auto;
+                    textarea {
+                        width: 95%;
+                        padding: 10px;
+                        box-sizing: border-box;
+                    }
+                    margin: 0 10px;
+                }
+                .example-container:first-child {
+                    margin-left: 0;
+                }
+                .example-container:last-child {
+                    margin-right: 0;
+                }
+            }
+            .example-wrapper:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

@@ -1,9 +1,8 @@
 import {ChildProcess, spawn} from "child_process";
-import * as express from "express";
 import * as crypto from "crypto";
-
-import { getUserPath  } from "../../helper/path-helper";
-import connection from "../../connection";
+import * as express from "express";
+import * as fs from "fs";
+import * as path from "path";
 
 const dockerInstance: {
     [key: string]: IDockerInstance;
@@ -12,203 +11,134 @@ const dockerInstance: {
 interface IDockerInstance {
     process: ChildProcess;
     stdout: IDockerOutput[];
+    stderr: IDockerOutput[];
 }
 
 interface IDockerOutput {
     data: string;
-    error: boolean;
+    index: number;
     closed: boolean;
 }
 
-const run = async (req: express.Request, res: express.Response) => {
-    const id = parseInt(req.params.id, 10);
-    const { user } = req.user;
-    if(!id) { res.status(400).send("no projects"); return;}
+const run = (req: express.Request, res: express.Response) => {
+    const sourcePath = path.join(__dirname, `../../../files/${req.user.userId}`);
 
-    const [rows] = await connection.execute("SELECT * FROM projects WHERE id = ? AND user = ? AND enabled = true", [id, user.id]);
-    if(rows.length != 1) { res.status(400).send("no data"); return; }
-    const result = rows[0];
-
-    const sourcePath = getUserPath({...user, ...result});
-    
-    let docker = null;
-
-    switch(result.category) {
-        case "java":
-            docker = spawn("docker", ["run", "--rm", "-i", "-v", `${sourcePath}:/src`, "java-compile-run:1.0"]);
-            break;
-        case "c":
-            docker = spawn("docker", ["run", "--rm", "-i", "-v", `${sourcePath}:/src`, "c-compile-run:1.0"]);
-            break;
+    if (!fs.existsSync(sourcePath)) {
+        fs.mkdirSync(sourcePath);
     }
 
-    const hash = crypto.createHmac("sha256", "")
-        .update(new Date().toString())
-        .digest("hex"); // hash value for seperate result
+    fs.writeFileSync(path.join(sourcePath, "Main.java"), req.body.source);
 
-    res.status(201).json({ hash }); // send result hash
+    const hash = crypto.createHmac("sha256", "")
+        .update(req.body.source)
+        .digest("hex");
+
+    const docker = spawn("docker", ["run", "--rm", "-v", `${sourcePath}:/src`, "java-build:1.0"]);
+
+    res
+        .status(201)
+        .json({
+            hash,
+        });
 
     dockerInstance[hash] = {
         process: docker,
-        stdout: []
+        stdout: [],
+        stderr: [],
     };
 
     docker.stdout.on("data", (data) => {
-        dockerInstance[hash].stdout.unshift({
+        dockerInstance[hash]
+            .stdout
+            .push({
                 data: data.toString(),
+                index: dockerInstance[hash].stdout.length,
                 closed: false,
-                error: false
             });
     });
 
     docker.stdout.on("end", () => {
-        dockerInstance[hash].stdout.unshift({
-            data: "",
-            closed: true,
-            error: false
-        });
+        dockerInstance[hash]
+            .stdout
+            .push({
+                data: "",
+                index: dockerInstance[hash].stdout.length,
+                closed: true,
+            });
     });
 
     docker.stderr.on("data", (data) => {
-        dockerInstance[hash].stdout.unshift({
-            data: data.toString(),
-            closed: false,
-            error: false
-        });
+        dockerInstance[hash]
+            .stderr
+            .push({
+                data: data.toString(),
+                index: dockerInstance[hash].stderr.length,
+                closed: false,
+            });
     });
 
     docker.stderr.on("end", () => {
-        if (dockerInstance[hash].stdout.length === 0) {
+        if (dockerInstance[hash].stderr.length === 0) {
             return;
         }
 
-        dockerInstance[hash].stdout.unshift({
-            data: "",
-            closed: true,
-            error: false
-        });
+        dockerInstance[hash]
+            .stderr
+            .push({
+                data: "",
+                index: dockerInstance[hash].stderr.length,
+                closed: true,
+            });
     });
-};
-
-const input = async (req: express.Request, res: express.Response) => {
-    const { hash } = req.params;
-    const { data }= req.body;
-
-    if (!dockerInstance[hash]) {
-        res.status(404).end();
-        return;
-    }
-    
-    dockerInstance[hash].process.stdin.write(data, ()=> {
-        dockerInstance[hash].process.stdin.end();
-    });
- 
-    res.status(200).json({});
 };
 
 const result = async (req: express.Request, res: express.Response) => {
     const hash = req.params.hash;
+    const isError = JSON.parse(req.query.is_error);
+    let index = req.query.index ? parseInt(req.query.index, 10) : -1;
+
     if (!dockerInstance[hash]) {
-        res.status(404).end();
+        res
+            .status(404)
+            .end();
         return;
     }
 
-    if(dockerInstance[hash].stdout.length > 0) {
-        const result = dockerInstance[hash].stdout.pop();
-
-        res.status(200).json({
-            error: result.error,
-            data: result.data,
-            closed: result.closed,
+    while (!((isError && dockerInstance[hash].stderr[index + 1]) ||
+        (!isError && dockerInstance[hash].stderr.length > 0) ||
+        (!isError && dockerInstance[hash].stdout[index + 1]))) {
+        await new Promise(resolve => {
+            setTimeout(resolve, 500);
         });
-        return;
-    } 
+    }
 
-    res.status(200).json({
-        wait: true
-    });
+    if (!isError && dockerInstance[hash].stderr.length > 0) {
+        index = -1;
+    }
+
+    if (dockerInstance[hash].stderr.length > 0) {
+        res
+            .status(200)
+            .json({
+                err: true,
+                data: dockerInstance[hash].stderr[index + 1].data,
+                index: index + 1,
+                closed: dockerInstance[hash].stderr[index + 1].closed,
+            });
+    } else {
+        console.log(index + 1, dockerInstance[hash].stdout[index + 1]);
+        res
+            .status(200)
+            .json({
+                err: false,
+                data: dockerInstance[hash].stdout[index + 1].data,
+                index: index + 1,
+                closed: dockerInstance[hash].stdout[index + 1].closed,
+            });
+    }
 };
-
-async function submit(req: express.Request, res: express.Response) {
-    
-    const id = parseInt(req.params.id, 10);
-    const { user } = req.user;
-    if(!id) { res.status(400).send("no projects"); return;}
-
-    const [rows] = await connection.execute("SELECT * FROM projects WHERE id = ? AND user = ? AND enabled = true", [id, user.id]);
-    if(rows.length != 1) { res.status(400).send("no data"); return; }
-    const result = rows[0];
-
-    const sourcePath = getUserPath({...user, ...result});
-    
-    let docker: ChildProcess;
-
-    switch(result.category) {
-        case "java":
-            docker = spawn("docker", ["run", "--rm", "-i", "-v", `${sourcePath}:/src`, "java-build:1.0"]);
-            break;
-        case "c":
-            docker = spawn("docker", ["run", "--rm", "-i", "-v", `${sourcePath}:/src`, "c-build:1.0"]);
-            break;
-    }
-
-    let isDockerDie = false;
-    docker.stderr.on("data", (data) => {
-        console.log(data.toString());
-        if(isDockerDie) return;
-        isDockerDie = true;
-        res.json({
-            compile: false,
-            testMax: 0, // 테스트 케이스 개수
-            testSuccess: 0
-        });
-    })
-
-    docker.stdout.on("end", async (data) => {
-        if(isDockerDie) return;
-        const [testCases] = await connection.execute("SELECT * FROM testCases WHERE id = ?", [result.problem]);
-        const testMax = testCases.length;
-        let testProccessing = 0;
-        let testSuccess = 0;
-
-        testCases.forEach(testCase => {
-            //TODO: category
-            const runTestCaseProcess = spawn("docker", ["run", "--rm", "-i", "-v", `${sourcePath}:/src`, "java-run:1.0"]);
-
-            let isSuccess = false;
-
-            runTestCaseProcess.stdin.write(testCase.input + "\n");
-            
-
-            runTestCaseProcess.stdout.on("data", (value) => {; 
-                isSuccess = value.toString().trim() == testCase.output.trim();
-            });
-
-            runTestCaseProcess.on("close", function() {
-                testSuccess += isSuccess ? 1 : 0;
-                testProccessing++;
-
-                if(testMax <= testProccessing) {
-                    res.json({
-                        compile: true,
-                        testMax, // 테스트 케이스 개수
-                        testSuccess
-                    });
-                }
-            });
-        });
-    });
-
-
-
-
-    const testResult = 0;
-
-}
 
 export const runEndPoint = {
     run,
-    input,
     result,
-    submit
 };

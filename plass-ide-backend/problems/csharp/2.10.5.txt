@@ -1,0 +1,19 @@
+B
+
+Q.
+다음 프로그램의 실행 결과는 무엇인가?
+using System;
+class ExerciseCh2_10_5 {
+    public static void Main() {
+        Console.WriteLine("number of bits = " + f(0x37));
+    }
+    public static int f(int n) { // 1의 비트 수를 세는 메소드
+        int c;
+        for (c=0; n!=0; n>>=1)
+            if ((n & 1) == 1) c++;
+        return c;
+    }
+}
+
+A.
+number of bits = 5

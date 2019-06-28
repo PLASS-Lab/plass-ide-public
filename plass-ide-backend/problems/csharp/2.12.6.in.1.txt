@@ -1,0 +1,3 @@
+Enter R1 : 10
+Enter R2 : 8
+Enter R3 : 6

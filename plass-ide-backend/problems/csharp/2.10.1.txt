@@ -1,0 +1,19 @@
+B
+
+Q.
+다음 프로그램의 실행 결과는 무엇인가?
+using System;
+class ExerciseCh2_10_1 {
+    public static void Main(){
+        Console.WriteLine("\t is tab.");
+        Console.WriteLine("'\t' is tab.");
+        Console.WriteLine("\'\t\' is tab.");
+        Console.WriteLine("'\\t' is tab.");
+    }
+}
+
+A.
+         is tab.
+'       ' is tab.
+'       ' is tab.
+'\t' is tab.

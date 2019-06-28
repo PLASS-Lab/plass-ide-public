@@ -1,55 +1,45 @@
 import * as express from "express";
-import connection from "../../connection";
+import * as fs from "fs";
+import * as path from "path";
+import {IProblem} from "../../types";
 
-const getProblems = async (req: express.Request, res: express.Response) => {
-    const unit = req.query.unit || 10;
-    const page = req.query.page || 0;
+const javaDirectory = path.join(__dirname, "../../../problems/java");
+const csharpDirectory = path.join(__dirname, "../../../problems/csharp");
+const problemDirectory = path.join(__dirname, "../../../problems/problem");
 
-    const [rows] = await connection.execute("SELECT * FROM problems LIMIT ?, ?", [page * unit, unit]);
+const getProblems = (req: express.Request, res: express.Response) => {
+    const problems = fs.readdirSync(javaDirectory).filter(file => !file.includes("in") && !file.includes("out"));
 
     res
         .status(200)
         .json({
-            problems: rows
+            problems,
         });
 };
 
-const getProblem = async (req: express.Request, res: express.Response) => {
-    const id = req.params.id;
+const getProblem = (req: express.Request, res: express.Response) => {
+    const label = req.params.label;
+    fs.readFileSync(path.join(javaDirectory, label), {encoding: "utf-8"});
 
-    const [rows] = await connection.execute(
-        "SELECT p.id, p.name, p.content, p.remarks, p.input as inputContent , p.output as outputContent, p.rank, \
-         p.category, p.created, t.input, t.output \
-        FROM problems as p LEFT JOIN testCases as t on p.id = t.problem  WHERE p.id = ?"
-        , [id]);
-
-    if(rows.length == 0) {
-        res.status(400).send();
+    if (!fs.existsSync(path.join(javaDirectory, label))) {
+        res
+            .status(404)
+            .end();
         return;
     }
-    
-    let result = {
-        testCases: []
+
+    const fileContent = fs.readFileSync(path.join(javaDirectory, label), {encoding: "utf-8"});
+
+    const problem: IProblem = {
+        number: label,
+        type: fileContent[0],
+        question: fileContent[0] === "A" ? /Q\.\n((.*\n)*.*)/.exec(fileContent)[1] : /Q\.\n((.*\n)*)A\.\n/.exec(fileContent)[1],
+        answer: fileContent[0] === "A" ? "" : /A\.\n((.*\n)*.*)/.exec(fileContent)[1],
     };
-
-    rows.forEach( (row) => {
-        if ( !result.hasOwnProperty("id") ) {
-            result["id"] = row.id; result["name"] = row.name; result["content"] = row.content; 
-            result["remarks"] = row.remarks; result["input"] = row.inputContent; result["output"] = row.outputContent;
-            result["rank"] = row.rank; result["created"] = row.created; result["category"] = row.category;
-        }
-        const testCase = {
-            input: row.input,
-            output: row.output
-        };
-        result.testCases.push(testCase);
-    });
-
-    console.log(result);
 
     res
         .status(200)
-        .json(result);
+        .json(problem);
 };
 
 export const problemEndPoint = {

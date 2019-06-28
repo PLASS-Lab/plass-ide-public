@@ -10,7 +10,7 @@
       "always",
       "ignore-bound-class-methods"
     ],
-    "ordered-imports": false,
+    "ordered-imports": true,
     "trailing-comma": false,
     "no-empty": false,
     "max-line-length": false,

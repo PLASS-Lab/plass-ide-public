@@ -1,0 +1,28 @@
+
+package test
+
+public class Order{
+
+   private Product product;
+
+   public Order(){
+
+    }
+
+    public int A( boolean isDiscount){
+
+        product = new Product();
+
+        if( isDiscount ){
+
+                return product.getDiscountPrice();        
+
+        }else{
+
+                return product.getPrice();        
+
+        }
+
+    }
+
+}

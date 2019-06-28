@@ -1,51 +1,24 @@
-<div class="ide-wrapper" *ngIf="project" (click)="disableContextMenu($event)">
-    <aside class="file-navigator" (contextmenu)="navContextMenu($event); openContextMenu($event)">
-        <div class="file-wrapper">
-            <h1>{{project.name}}</h1>
-            <ul (contextmenu)="directoryContextMenu($event, null); openContextMenu($event)">
-                <ng-template #recursiveList let-list>
-                    <li *ngFor="let file of list" [ngClass]="{'delete': file.isDelete}" (contextmenu)="directoryContextMenu($event, file); openContextMenu($event)">
-                        <p (click)="clickFile(file)" [ngClass]="{'modify': file.isTemp || file.modify}">
-                            <span *ngIf="file.isDirectory">D</span>
-                            {{file.name}}
-                        </p>
-                        <ul *ngIf="file.isDirectory && file.open && file.files.length > 0">
-                            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: file.files }"></ng-container>
-                        </ul>
-                    </li>
-                </ng-template>
-                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: project.files }"></ng-container>
-            </ul>
+<div class="root">
+    <p-card class="card-panel panel__problem">
+        <a href="{{apiUrl}}/signout">
+            <p-button label="로그아웃" styleClass="ui-button-danger"></p-button>
+        </a>
+        <perfect-scrollbar>
+            <p-accordion (onOpen)="onProblemClick($event)">
+                <p-accordionTab *ngFor="let problem of javaProblemLabels; index as i" [header]="problem">
+                    <div *ngIf="javaProblems[i]" class="panel__problem__content">
+                        <pre>{{javaProblems[i].question}}</pre>
+                        <button (click)="onAnswerButtonClick(i)" [label]="javaProblems[i].type === 'A' ? '풀어보기' : '답안 확인'" class="panel__problem__content__button--check ui-button-success" icon="pi pi-arrow-right" iconPos="right" pButton type="button"></button>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </perfect-scrollbar>
+    </p-card>
+    <p-card class="card-panel panel__editor">
+        <div class="editor-root">
+            <ace-editor #editor [(ngModel)]="answer" class="editor" mode="java" theme="dracula"></ace-editor>
+            <button (click)="runSource()" class="panel__problem__content__button--check ui-button-success" icon="pi pi-caret-right" iconPos="right" label="실행" pButton type="button"></button>
+            <ace-editor #editor [(ngModel)]="result" [readOnly]="true" class="editor" theme="dracula"></ace-editor>
         </div>
-    </aside>
-    <section>
-        <div class="editor-wrapper">
-            <tab-component #tabComponent [upload]="uploadFile" [compile]="compileProject">
-            </tab-component>
-        </div>
-        <div class="console-wrapper">
-            <div ace-editor class="console" theme='eclipse' [(text)]="resultConsole"></div>
-            <div class="console-input-wrapper">
-                <input type="text" (keyup)="consoleInput($event)"/>
-            </div>
-        </div>
-    </section>
+    </p-card>
 </div>
-
-
-<ng-container *ngIf="contextMenu.visible">
-    <div class="context-menu" [ngStyle]="{'top.px': contextMenu.y, 'left.px': contextMenu.x}">
-        <div class="menu-item" [ngClass]="{'disabled': !contextMenu.addFile}"
-            (click)="addFile(); disableContextMenu($event)">add file</div>
-
-        <div class="menu-item" [ngClass]="{'disabled': !contextMenu.addDirectory}"
-            (click)="addDirectory(); disableContextMenu($event)">add directory</div>
-
-            <div class="menu-item" [ngClass]="{'disabled': !contextMenu.rename}"
-            (click)="renameFile(); disableContextMenu($event)">rename</div>
-        <div class="menu-item" [ngClass]="{'disabled': !contextMenu.delete}"
-            (click)="deleteFile(); disableContextMenu($event)">delete</div>
-    </div>
-</ng-container>
-
-<modal-name [apply]="apply" [project]="project" (modalOff)="modalOff($event)" #nameModal></modal-name>

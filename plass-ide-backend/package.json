@@ -7,8 +7,8 @@
     "build": "npm run lint && npm run clean && tsc",
     "clean": "rimraf build",
     "lint": "tslint --project tsconfig.json",
-    "start": "ts-node src/app.ts",
-    "start:live": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/app.ts"
+    "start": "node build/app.js",
+    "start:dev": "npm run clean && tsc && node build/app"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,7 @@
     "@types/passport-jwt": "^3.0.1",
     "@types/socket.io": "^2.1.2",
     "concurrently": "^4.0.1",
-    "rimraf": "^2.6.3",
+    "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   },
@@ -39,10 +39,8 @@
     "express": "^4.16.3",
     "iconv": "^2.3.2",
     "jsonwebtoken": "^8.4.0",
-    "mkdirp": "^0.5.1",
     "morgan": "^1.9.1",
-    "mysql2": "^1.6.5",
-    "ncp": "^2.0.0",
+    "mysql": "^2.16.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "socket.io": "^2.2.0"

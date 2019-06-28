@@ -1,7 +1,7 @@
 B
 
 Q.
-´ÙÀ½ ÇÁ·Î±×·¥ÀÇ ½ÇÇà °á°ú¸¦ ¾²½Ã¿À.
+ë‹¤ìŒ í”„ë¡œê·¸ë¨ì˜ ì‹¤í–‰ ê²°ê³¼ë¥¼ ì“°ì‹œì˜¤.
 using System;
 class ExerciseCh1_5_2 {
     public static void Main()

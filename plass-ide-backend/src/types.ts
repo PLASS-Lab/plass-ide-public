@@ -9,13 +9,3 @@ export interface IProblem {
     question: string;
     answer: string;
 }
-
-export interface IFile {
-    name: string;
-    isDirectory: boolean;
-    path: string;
-    ext?: string;
-    size?: number;
-    files?: Array<IFile>;
-    data?: any;
-}

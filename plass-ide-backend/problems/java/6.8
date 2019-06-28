@@ -1,0 +1,36 @@
+B
+
+Q.
+다음 프로그램의 에러를 모두 지적하고 바른 프로그램으로 만든 후 실행 결과를 쓰시오
+
+interface InterfaceA {
+    int MAX_VALUE = 32767;
+    int MIN_VALUE = -32768;
+    int getMax();
+    int getMin();
+}
+interface InterfaceB {
+    int MAX_VALUE = 2147483647;
+    int MIN_VALUE = -2147483648;
+    int getMax();
+    int getMin();
+}
+class ClassA implements InterfaceA, InterfaceB {
+    public int getMax() {
+        return MAX_VALUE;
+    }
+}
+class ClassB extends ClassA {
+    int getMin() {
+        return MIN_VALUE;
+    }
+}
+public class ExerciseCh6_8 {
+    public static void main(String[] args) {
+        ClassA obj = new ClassB();
+        System.out.println("Max = " + getMax() + ", Min = " + getMin());
+    }
+}
+
+A.
+Max = 2147483647, Min = -2147483647

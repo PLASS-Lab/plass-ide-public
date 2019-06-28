@@ -1,26 +1,45 @@
+import * as bcrypt from "bcrypt";
 import * as express from "express";
+import * as fs from "fs";
+import * as path from "path";
 import {auth} from "../../auth";
-import connection from "../../connection";
+import {IUser} from "../../types";
 
-const signin = async (req: express.Request, res: express.Response) => {
-    if (req.body.userId === undefined || req.body.userPw === undefined) { res.status(400).send({}); return; }
-    
-    const user = req.body.userId;
-    const password = req.body.userPw;
-    
-    try {
-        const [rows] = await connection.execute("SELECT * FROM users WHERE username = ? AND password = ?", [ user, password ]);
-        
-        if (rows.length != 1) {
-            res.status(400).send();
-            return;
-        }
+const userPath = path.join(__dirname, "../../../users.json");
 
-        const token = auth.signToken({ user: rows[0] });
+const readUsers = (): IUser[] => {
+    if (!fs.existsSync(userPath)) {
+        fs.writeFileSync(userPath, "[{\"name\": \"test\",\"pw\": \"$2b$10$.2DgK45g7ov3Fa51OxozZe3gu4MDMieRIc7rGxKIf8b3tgxjBsm0i\"}]");
+    }
 
-        res.cookie("token", token).status(200).send(rows[0]);
-    } catch (e) {
-        console.log(e);
+    return JSON.parse(fs.readFileSync(userPath, {encoding: "UTF-8"}));
+};
+
+const signin = (req: express.Request, res: express.Response) => {
+    if (req.body.userId === undefined || req.body.userPw === undefined) {
+        res
+            .status(400)
+            .end();
+        return;
+    }
+
+    const users = readUsers();
+
+    if (users.some(value => req.body.userId === value.name && bcrypt.compareSync(req.body.userPw, value.pw))) {
+        const token = auth.signToken({
+            userId: req.body.userId,
+        });
+
+        res
+            .cookie("token", token)
+            .status(200)
+            .end();
+        return;
+    } else {
+        res
+            .status(403)
+            .end();
+        return;
     }
 };
 
@@ -28,14 +47,14 @@ const signout = (req: express.Request, res: express.Response) => {
     res
         .clearCookie("token")
         .set("location", "/")
-        .status(200)
+        .status(302)
         .end();
 };
 
 const verify = (req: express.Request, res: express.Response) => {
     res
         .status(200)
-        .send({...req.user.user});
+        .end();
 };
 
 export const authEndPoint = {

@@ -1,0 +1,54 @@
+B
+
+Q.
+다음 프로그램은 명령어 라인 매개변수의 값에 따라 다른 형태의 결과를 갖는다. 명령어 라인 매개변수로 1부터 5까지 각각의 값에 따른 결과를 예측하여 보시오.
+
+using System;
+
+class ExerciseCh6_13 : ApplicationException
+{
+    public static void Main(string[] args)
+    {
+        int mysteriousState = int.Parse(args[0]);
+        while (true)
+        {
+            Console.Write("Who ");
+            try
+            {
+                Console.Write("is ");
+                if (mysteriousState == 1) return;
+                Console.Write("that ");
+                if (mysteriousState == 2) break;
+                Console.Write("strange ");
+                if (mysteriousState == 3) continue;
+                Console.Write("but kindly ");
+                if (mysteriousState == 4)
+                    throw new ExerciseCh6_13();
+                Console.Write("not at all ");
+            }
+            finally
+            {
+                Console.Write("amusing ");
+            }
+            Console.Write("yet compelling ");
+            break;
+        }
+        Console.Write("man?");
+    }
+}
+
+A.
+1 입력시
+Who is amusing
+
+2 입력시
+Who is that amusing man?
+
+3 입력시
+Who is that strange amusing 무한 반복
+
+4 입력시
+Who is that strange but kindly
+
+5 입력시
+Who is that strange but kindly not at all amusing yet compelling man?

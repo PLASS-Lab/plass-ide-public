@@ -1,0 +1,18 @@
+B
+
+Q.
+다음의 프로그램의 실행결과는 무엇인가?
+
+public class ExerciseCh2_6_3 {
+    public static void main(String[] args){
+        int matrix[][] = { {1, 2}, null };
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                System.out.println(matrix[i][j]);
+    }
+}
+
+A.
+Exception in thread "main" 2
+java.lang.NullPointerException
+	at ExerciseCh2_6_3.main(ExerciseCh2_6_3.java:6)

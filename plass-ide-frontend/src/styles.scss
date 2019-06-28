@@ -3,13 +3,12 @@
 @import '~primeng/resources/primeng.min.css';
 @import "~primeng/resources/themes/nova-light/theme.css";
 
-html {
-  min-height: 100%;
-  display: flex;
-}
-
-body {
-  flex: 1;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   background-color: #FAFAFA;
 }
 

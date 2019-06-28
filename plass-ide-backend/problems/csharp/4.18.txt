@@ -1,0 +1,178 @@
+D
+
+Q.
+다음은 날짜에 대한 클래스이다.
+
+class Date {
+    private int day, month, year;
+    public Date(int mm, int dd, int yy) {   // 생성자
+        day = dd;
+        month = mm;
+        year = yy;
+    }
+    public static Date operator+(Date d, int n) {
+        // ...
+    }
+    public static Date operator-(Date d, int n) {
+        // ...
+    }
+    override public string ToString() {     // mm/dd/yy
+        return string.Format("{0:2}/{1:2}/{2:2}",month,day,year);
+    }
+}
+
+(1)
+날짜에 대한 ==(equal)과 !=(not equal) 연산자를 중복하시오.
+
+(2)
+날짜에 대한 >(greater than)과 <(less then) 연산자를 중복하시오.
+
+(3)
+날짜에 대한 ++와 -- 연산자를 중복하여 정의하시오. 날짜에 대한 ++ 연산자는 다음 날을 의미하고 -- 연산자는 전날을 의미한다.
+
+(4)
+날짜에 대한 +와 - 연산자를 중복하시오. 매개변수로 받은 n일 만큼 후의 날짜이거나 전의 날짜를 의미한다.
+
+(5)
+테스트 클래스를 만들어 테스트 하시오.
+
+A.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Es04_18
+{
+    class Date
+    {
+        private int day, month, year;
+        public Date(int mm, int dd, int yy)     // 생성자
+        {
+            day = dd;
+            month = mm;
+            year = yy;
+        }
+
+        public static bool operator ==(Date d1, Date d2) // 날짜에 대한 == 연산 정의
+        {
+            if (d1.year == d2.year && d1.month == d2.month && d1.day == d2.day)
+                return true;
+            else return false;
+        }
+
+        public static bool operator !=(Date d1, Date d2) // 날짜에 대한 != 연산 정의
+        {
+            if (d1.year == d2.year && d1.month == d2.month && d1.day == d2.day)
+                return false;
+            else return true;
+        }
+
+        public static bool operator >(Date d1, Date d2) // 날짜에 대한 > 연산 정의
+        {
+            if (d1.year > d2.year)
+                return true;
+            else if (d1.year == d2.year && d1.month > d2.month)
+                return true;
+            else if (d1.year == d2.year && d1.month == d2.month && d1.day > d2.day)
+                return true;
+            else return false;
+        }
+
+        public static bool operator <(Date d1, Date d2) // 날짜에 대한 < 연산 정의
+        {
+            if (d1.year < d2.year)
+                return true;
+            else if (d1.year == d2.year && d1.month < d2.month)
+                return true;
+            else if (d1.year == d2.year && d1.month == d2.month && d1.day < d2.day)
+                return true;
+            else return false;
+        }
+
+        public static Date operator ++(Date d) // 날짜에 대한 ++ 연산 정의
+        {
+            d.day++;
+            if (d.day > DateTime.DaysInMonth(d.year, d.month))
+            {
+                d.day = 1;
+                if (d.month == 12)
+                {
+                    d.month = 1;
+                    d.year++;
+                }
+                else d.month++;
+            }
+            return d;
+        }
+
+        public static Date operator --(Date d) // 날짜에 대한 -- 연산 정의
+        {
+            if (d.day == 1)
+            {
+                if (d.month == 1)
+                    d.month = 12;
+                else d.month--;
+                d.day = DateTime.DaysInMonth(d.year, d.month);
+            }
+            else d.day--;
+            return d;
+        }
+
+        public static Date operator +(Date d, int n) // 날짜에 대한 + 연산 정의
+        {
+            d.day += n;
+            while (d.day > DateTime.DaysInMonth(d.year, d.month))
+            {
+                d.day = d.day - DateTime.DaysInMonth(d.year, d.month);
+                if (d.month == 12)
+                {
+                    d.month = 1;
+                    d.year++;
+                }
+                else d.month++;
+            }
+            return d;
+        }
+
+        public static Date operator -(Date d, int n) // 날짜에 대한 - 연산 정의
+        {
+            d.day -= n;
+            while (d.day <= 0)
+            {
+                if (d.month == 1)
+                    d.month = 12;
+                else d.month--;
+                d.day = DateTime.DaysInMonth(d.year, d.month) + d.day;
+            }
+            return d;
+        }
+
+        override public string ToString()  // mm/dd/yy
+        {
+            return string.Format("{0,2}/{1,2}/{2,2}", month, day, year);
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Date d1 = new Date(7, 31, 2007);
+            Date d2 = new Date(12, 1, 2007);
+
+            Console.WriteLine("d1 == d2 ? " + (d1 == d2));
+            Console.WriteLine("d1 > d2 ? " + (d1 > d2));
+            Console.WriteLine("d1 < d2 ? " + (d1 < d2));
+            d1++;
+            Console.WriteLine("d1++ : " + d1);
+            d2--;
+            Console.WriteLine("d2-- : " + d2);
+            d2 = d2 + 30;
+            Console.WriteLine("d2+30 : " + d2);
+            d1 = d1 - 30;
+            Console.WriteLine("d1-30 : " + d1);
+        }
+    }
+}

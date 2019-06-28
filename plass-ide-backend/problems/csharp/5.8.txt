@@ -1,0 +1,11 @@
+A
+
+Q.
+다음과 같은 추상 클래스를 이용하여 사각형과 원에 대한 클래스를 각각 정의하고 테스트하는 프로그램을 작성하시오.
+
+abstract class Figure
+{
+    public abstract void Area();  //넓이를 구하는 메소드
+    public abstract void Girth(); //둘레를 구하는 메소드
+    public abstract void Draw();  //도형을 그리는 메소드
+}

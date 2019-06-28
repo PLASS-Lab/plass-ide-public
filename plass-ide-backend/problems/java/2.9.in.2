@@ -1,0 +1,38 @@
+
+package test
+
+public class Order{
+
+   private Product product;
+
+   /*생성자 메소드 */
+
+   public Order(){
+
+    }
+
+    public int A( boolean isDiscount){
+
+        /* isDiscount가 true일 경우에는 getDiscountPrice()를 호출하고,
+
+           false일 경우에는 getPrice()를 호출한다.
+
+        */
+
+        //Product라는 클래스를 product라는 인스턴스 생성
+
+        product = new Product();
+
+        if( isDiscount ){
+
+                return product.getDiscountPrice();        
+
+        }else{
+
+                return product.getPrice();        
+
+        }
+
+    }
+
+}

@@ -1,2 +1,0 @@
-Enter H : 123.4
-Enter W : 36.2

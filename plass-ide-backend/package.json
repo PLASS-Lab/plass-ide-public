@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@types/iconv": "^2.1.16",
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",

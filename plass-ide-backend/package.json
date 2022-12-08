@@ -36,7 +36,7 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "iconv": "^2.3.2",
     "jsonwebtoken": "^8.4.0",
     "morgan": "^1.9.1",
